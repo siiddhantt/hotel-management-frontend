@@ -94,8 +94,13 @@ function App() {
             justifyContent: "space-between",
             color: "white",
             marginBottom: "10px",
-            height: "3.5rem",
+            height: "5rem",
             width: "100%",
+            borderStyle: "solid",
+            borderColor: "rgba(255, 255, 255, 0.25)",
+            borderWidth: "0.1rem",
+            borderRadius: "10px",
+            padding: "10px",
           }}
         >
           <Button
@@ -107,22 +112,14 @@ function App() {
             Add new booking
           </Button>
           <div
-            style={{ display: "flex", alignItems: "center", width: "11rem" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "11rem",
+              justifyContent: "right",
+              gap: 5,
+            }}
           >
-            <Dropdown
-              menu={{
-                items,
-                selectable: true,
-                defaultSelectedKeys: ["1"],
-              }}
-            >
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>
-                  Filter
-                  <ArrowDropDownOutlined />
-                </Space>
-              </a>
-            </Dropdown>
             {filter === "room-type" || filter === "room-number" ? (
               <input
                 style={{
@@ -137,7 +134,7 @@ function App() {
                   setFilterData(e.target.value);
                 }}
               ></input>
-            ) : (
+            ) : filter === "start-time" || filter === "end-time" ? (
               <div style={{ maxWidth: "0.1rem" }}>
                 <DateTimePicker
                   sx={{
@@ -148,7 +145,23 @@ function App() {
                   onChange={(value) => setFilterData(parseInt(value.unix()))}
                 />
               </div>
+            ) : (
+              <></>
             )}
+            <Dropdown
+              menu={{
+                items,
+                selectable: true,
+                defaultSelectedKeys: ["1"],
+              }}
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  Filter
+                  <ArrowDropDownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
           </div>
         </div>
 
