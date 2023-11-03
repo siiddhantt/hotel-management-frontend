@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+
 import Menus from "../atoms/Menus";
 import Table from "../atoms/Table";
 import BookingRow from "./BookingRow";
-
 import API_Service from "../../api/service";
 
 function filterByRoomType(bookings, roomType) {
@@ -18,23 +18,28 @@ function filterByRoomNumber(bookings, roomNumber) {
 }
 
 function BookingTable({ filter, filterData }) {
+  const [globalBookData, setGlobalBookData] = useState([]);
   const [bookData, setBookData] = useState([]);
+  const [updateData, setUpdateData] = useState(false);
+  const handleUpdateData = () => setUpdateData(!updateData);
+  const fetchData = useMemo(async () => {
+    const response = await API_Service.getBookings();
+    const data = response.data.data;
+    setBookData(data);
+    setGlobalBookData(data);
+  }, [updateData]);
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await API_Service.getBookings();
-      const data = response.data.data;
-      switch (filter) {
-        case "room-type":
-          setBookData(filterByRoomType(data, filterData));
-          break;
-        case "room-number":
-          setBookData(filterByRoomNumber(data, parseInt(filterData)));
-          break;
-        default:
-          setBookData(data);
-      }
-    };
-    fetchData();
+    () => fetchData;
+    switch (filter) {
+      case "room-type":
+        setBookData(filterByRoomType(globalBookData, filterData));
+        break;
+      case "room-number":
+        setBookData(filterByRoomNumber(globalBookData, parseInt(filterData)));
+        break;
+      default:
+        setBookData(globalBookData);
+    }
   }, [filter, filterData]);
   return (
     <Menus>
@@ -49,7 +54,11 @@ function BookingTable({ filter, filterData }) {
         <Table.Body
           data={bookData}
           render={(booking) => (
-            <BookingRow key={booking.id} booking={booking} />
+            <BookingRow
+              key={booking.id}
+              booking={booking}
+              handleUpdateData={handleUpdateData}
+            />
           )}
         />
       </Table>

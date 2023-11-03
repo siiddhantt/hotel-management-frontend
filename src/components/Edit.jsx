@@ -5,7 +5,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import API_Service from "../api/service";
 
-function Edit({ initialData }) {
+function Edit({ initialData, handleUpdateData }) {
   const [roomNumber, setRoomNumber] = useState(initialData.room_id);
   const [userEmail, setUserEmail] = useState(initialData.user_email);
   const [startTime, setStartTime] = useState(initialData.start_time);
@@ -15,7 +15,6 @@ function Edit({ initialData }) {
     const response = await API_Service.getPrice({
       room_id: roomNumber,
     });
-    console.log(response);
     if (response.data.length > 0)
       setPrice(
         Math.max(
@@ -41,6 +40,7 @@ function Edit({ initialData }) {
       amount: price,
     });
     setAlertSuccess(true);
+    handleUpdateData();
     setTimeout(() => {
       setAlertSuccess(false);
       setAlertError(false);

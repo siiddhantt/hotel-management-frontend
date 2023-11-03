@@ -48,7 +48,6 @@ function App() {
       label: (
         <button
           onClick={() => {
-            console.log("yoooo");
             handleRoomFilter("room-number");
           }}
         >

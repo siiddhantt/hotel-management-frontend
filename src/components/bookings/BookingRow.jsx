@@ -35,7 +35,7 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-function BookingRow({ booking }) {
+function BookingRow({ booking, handleUpdateData }) {
   const [cancelData, setCancelData] = useState([]);
   const [editData, setEditData] = useState([]);
   const [refund, setRefund] = useState(0.0);
@@ -94,10 +94,15 @@ function BookingRow({ booking }) {
         </div>
       </Table.Row>
       <Modal open={openPopup} onClose={handleRemovePopUp}>
-        <Cancel data={cancelData} refund={refund} onClose={handleRemovePopUp} />
+        <Cancel
+          data={cancelData}
+          refund={refund}
+          onClose={handleRemovePopUp}
+          handleUpdateData={handleUpdateData}
+        />
       </Modal>
       <Modal open={openEditPopup} onClose={handleEditRemovePopUp}>
-        <Edit initialData={editData} />
+        <Edit initialData={editData} handleUpdateData={handleUpdateData} />
       </Modal>
     </>
   );

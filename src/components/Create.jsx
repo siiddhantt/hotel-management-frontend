@@ -15,7 +15,6 @@ function Create({ initialData }) {
     const response = await API_Service.getPrice({
       room_id: roomNumber,
     });
-    console.log(response);
     if (response.data.length > 0)
       setPrice(
         Math.max(

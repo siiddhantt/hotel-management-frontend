@@ -2,9 +2,10 @@ import React from "react";
 
 import API_Service from "../api/service";
 
-function Cancel({ data, refund, onClose }) {
+function Cancel({ data, refund, onClose, handleUpdateData }) {
   const handleConfirm = async () => {
     await API_Service.deleteBooking({ id: data.id });
+    handleUpdateData();
     onClose();
   };
   return (
