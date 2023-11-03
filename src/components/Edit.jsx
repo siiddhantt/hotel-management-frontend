@@ -39,7 +39,8 @@ function Edit({ initialData, handleUpdateData }) {
       end_time: endTime,
       amount: price,
     });
-    setAlertSuccess(true);
+    console.log(response.data);
+    response.data.isValid ? setAlertSuccess(true) : setAlertError(true);
     handleUpdateData();
     setTimeout(() => {
       setAlertSuccess(false);
