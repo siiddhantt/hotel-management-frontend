@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Button, Modal } from "@mui/material";
 import styled from "styled-components";
 
-import Table from "../atoms/Table";
-import Cancel from "../Cancel";
 import Edit from "../Edit";
-import { formatCurrency } from "../../utils/helpers";
+import Cancel from "../Cancel";
+import Table from "../atoms/Table";
+
+import { convertEpoch, formatCurrency } from "../../utils/helpers";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -39,10 +40,6 @@ function BookingRow({ booking, handleUpdateData }) {
   const [cancelData, setCancelData] = useState([]);
   const [editData, setEditData] = useState([]);
   const [refund, setRefund] = useState(0.0);
-  const convert = (epoch) => {
-    const dateTime = new Date(epoch * 1000).toLocaleString();
-    return dateTime;
-  };
   const handleCancel = async () => {
     setCancelData(booking);
     const timediff = booking.start_time - Math.floor(Date.now() / 1000);
@@ -54,7 +51,6 @@ function BookingRow({ booking, handleUpdateData }) {
   };
   const handleEdit = async () => {
     setEditData(booking);
-    console.log(booking);
     setEditOpenPopup(true);
   };
   const [openPopup, setOpenPopup] = useState(false);
@@ -72,10 +68,10 @@ function BookingRow({ booking, handleUpdateData }) {
           <span>{booking.user_email}</span>
         </Stacked>
         <Stacked>
-          <span>{convert(booking.start_time)}</span>
+          <span>{convertEpoch(booking.start_time)}</span>
         </Stacked>
         <Stacked>
-          <span>{convert(booking.end_time)}</span>
+          <span>{convertEpoch(booking.end_time)}</span>
         </Stacked>
         <Amount>{formatCurrency(booking.amount)}</Amount>
         <div style={{ marginRight: "2px" }}>
@@ -87,7 +83,11 @@ function BookingRow({ booking, handleUpdateData }) {
             >
               Edit
             </Button>
-            <Button variant="outlined" onClick={() => handleCancel()}>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => handleCancel()}
+            >
               Cancel
             </Button>
           </Stacked>

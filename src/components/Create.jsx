@@ -4,46 +4,34 @@ import { Alert, TextField, Button } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import API_Service from "../api/service";
+import { priceCalculate } from "../utils/helpers";
 
-function Create({ initialData }) {
-  const [roomNumber, setRoomNumber] = useState(initialData.roomNumber || "");
-  const [userEmail, setUserEmail] = useState(initialData.userEmail || "");
+function Create() {
+  const [roomNumber, setRoomNumber] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [startTime, setStartTime] = useState(dayjs().unix());
-  const [endTime, setEndTime] = useState(initialData.endTime || "");
+  const [endTime, setEndTime] = useState("");
   const [price, setPrice] = useState(0);
-  const priceCalculate = async () => {
-    const response = await API_Service.getPrice({
-      room_id: roomNumber,
-    });
-    if (response.data.length > 0)
-      setPrice(
-        Math.max(
-          response.data[0].hourly_rate *
-            ((endTime - startTime) / 3600).toFixed(2),
-          0
-        )
-      );
-    else setPrice(0);
-  };
   useEffect(() => {
-    priceCalculate();
+    priceCalculate(roomNumber, startTime, endTime, setPrice);
   }, [roomNumber, startTime, endTime]);
   const [alertSuccess, setAlertSuccess] = useState(false);
   const [alertError, setAlertError] = useState(false);
   const handleCreate = async () => {
-    const response = await API_Service.createBooking({
-      room_id: roomNumber,
-      user_email: userEmail,
-      start_time: startTime,
-      end_time: endTime,
-      amount: price,
-    });
-    console.log(response.data);
-    response.data.isValid ? setAlertSuccess(true) : setAlertError(true);
-    setTimeout(() => {
-      setAlertSuccess(false);
-      setAlertError(false);
-    }, 3000);
+    if (endTime > startTime || price > 0) {
+      const response = await API_Service.createBooking({
+        room_id: roomNumber,
+        user_email: userEmail,
+        start_time: startTime,
+        end_time: endTime,
+        amount: price,
+      });
+      response.data.isValid ? setAlertSuccess(true) : setAlertError(true);
+      setTimeout(() => {
+        setAlertSuccess(false);
+        setAlertError(false);
+      }, 3000);
+    } else alert("Invalid price or check-in & check-out time");
   };
   return (
     <div className="modal-body">
