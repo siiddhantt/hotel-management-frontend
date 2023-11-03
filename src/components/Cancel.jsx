@@ -15,7 +15,7 @@ function Cancel({ data, refund, onClose, handleUpdateData }) {
           <div className="icon-box">
             <i className="material-icons">&#xE5CD;</i>
           </div>
-          <h4 className="modal-title w-100">Are you sure?</h4>
+          <h4 className="modal-title w-100">Are you sure ?</h4>
           <button
             type="button"
             className="close"
@@ -26,12 +26,19 @@ function Cancel({ data, refund, onClose, handleUpdateData }) {
             &times;
           </button>
         </div>
-        <div className="modal-body-1" style={{ marginTop: "20px" }}>
-          <div>Booking ID: {data.id}</div>
-          <div>Room Number: {data.room_id}</div>
-          <div>Email: {data.user_email}</div>
-          <div>Amount Paid: {data.amount}</div>
-          <div>Refund Amount: {refund}</div>
+        <div className="modal-body-1">
+          <div className="modal-body-content-1">
+            <div>Booking ID:</div>
+            <div>Room Number:</div>
+            <div>Amount Paid:</div>
+            <div>Refund Amount:</div>
+          </div>
+          <div className="modal-body-content-2">
+            <div>{data.id}</div>
+            <div>{data.room_id}</div>
+            <div>₹{data.amount}</div>
+            <div>₹{refund}</div>
+          </div>
         </div>
         <div className="modal-footer justify-content-center">
           <button

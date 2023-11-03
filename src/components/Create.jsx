@@ -8,7 +8,7 @@ import API_Service from "../api/service";
 function Create({ initialData }) {
   const [roomNumber, setRoomNumber] = useState(initialData.roomNumber || "");
   const [userEmail, setUserEmail] = useState(initialData.userEmail || "");
-  const [startTime, setStartTime] = useState(initialData.startTime || "");
+  const [startTime, setStartTime] = useState(dayjs().unix());
   const [endTime, setEndTime] = useState(initialData.endTime || "");
   const [price, setPrice] = useState(0);
   const priceCalculate = async () => {
@@ -23,6 +23,7 @@ function Create({ initialData }) {
           0
         )
       );
+    else setPrice(0);
   };
   useEffect(() => {
     priceCalculate();

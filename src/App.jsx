@@ -1,5 +1,4 @@
 import { useState } from "react";
-import dayjs from "dayjs";
 import { Dropdown, Space } from "antd";
 import { Modal, Button } from "@mui/material";
 import { AddCircle } from "@mui/icons-material";
@@ -123,7 +122,7 @@ function App() {
             {filter === "room-type" || filter === "room-number" ? (
               <input
                 style={{
-                  height: "100%",
+                  height: "50%",
                   width: "4.5rem",
                   color: "black",
                   fontSize: "15px",
@@ -142,6 +141,8 @@ function App() {
                     borderRadius: "10px",
                   }}
                   label=""
+                  inputProps={{ size: "small" }}
+                  slotProps={{ textField: { size: "small" } }}
                   onChange={(value) => setFilterData(parseInt(value.unix()))}
                 />
               </div>
