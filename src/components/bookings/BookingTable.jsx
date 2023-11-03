@@ -17,6 +17,18 @@ function filterByRoomNumber(bookings, roomNumber) {
   });
 }
 
+function filterByStartTime(bookings, startTime) {
+  return bookings.filter((booking) => {
+    return booking.start_time >= startTime;
+  });
+}
+
+function filterByEndTime(bookings, endTime) {
+  return bookings.filter((booking) => {
+    return booking.end_time <= endTime;
+  });
+}
+
 function BookingTable({ filter, filterData }) {
   const [globalBookData, setGlobalBookData] = useState([]);
   const [bookData, setBookData] = useState([]);
@@ -36,6 +48,12 @@ function BookingTable({ filter, filterData }) {
         break;
       case "room-number":
         setBookData(filterByRoomNumber(globalBookData, parseInt(filterData)));
+        break;
+      case "start-time":
+        setBookData(filterByStartTime(globalBookData, parseInt(filterData)));
+        break;
+      case "end-time":
+        setBookData(filterByEndTime(globalBookData, parseInt(filterData)));
         break;
       default:
         setBookData(globalBookData);

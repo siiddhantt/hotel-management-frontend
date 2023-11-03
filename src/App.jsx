@@ -1,19 +1,21 @@
 import { useState } from "react";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import { Dropdown, Space } from "antd";
 import { Modal, Button } from "@mui/material";
 import { AddCircle } from "@mui/icons-material";
+import { ArrowDropDownOutlined } from "@mui/icons-material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import "./App.css";
 import Create from "./components/Create";
 import Bookings from "./components/bookings/Bookings";
 import GlobalStyles from "./styles/GlobalStyles";
-import { ArrowDropDownOutlined } from "@mui/icons-material";
-import { Dropdown, Space } from "antd";
 
 function App() {
   const [openPopup, setOpenPopup] = useState(false);
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState("none");
   const [filterData, setFilterData] = useState("");
   const handleRemovePopUp = () => setOpenPopup(false);
   const handleBooking = () => setOpenPopup(true);
@@ -55,58 +57,101 @@ function App() {
         </button>
       ),
     },
+    {
+      key: "4",
+      label: (
+        <button
+          onClick={() => {
+            handleRoomFilter("start-time");
+          }}
+        >
+          Start time
+        </button>
+      ),
+    },
+    {
+      key: "5",
+      label: (
+        <button
+          onClick={() => {
+            handleRoomFilter("end-time");
+          }}
+        >
+          End time
+        </button>
+      ),
+    },
   ];
   return (
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       <GlobalStyles />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          color: "white",
-          marginBottom: "10px",
-          width: "100%",
-        }}
-      >
-        <Button
-          variant="outlined"
-          color="success"
-          startIcon={<AddCircle />}
-          onClick={handleBooking}
-        >
-          Add new booking
-        </Button>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Dropdown
-            menu={{
-              items,
-              selectable: true,
-            }}
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                Filter
-                <ArrowDropDownOutlined />
-              </Space>
-            </a>
-          </Dropdown>
-          <input
-            style={{
-              width: "4.5rem",
-              height: "1.5rem",
-              color: "black",
-              fontSize: "15px",
-              textAlign: "center",
-            }}
-            onChange={(e) => {
-              setFilterData(e.target.value);
-            }}
-          ></input>
-        </div>
-      </div>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            color: "white",
+            marginBottom: "10px",
+            height: "3.5rem",
+            width: "100%",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="success"
+            startIcon={<AddCircle />}
+            onClick={handleBooking}
+          >
+            Add new booking
+          </Button>
+          <div
+            style={{ display: "flex", alignItems: "center", width: "11rem" }}
+          >
+            <Dropdown
+              menu={{
+                items,
+                selectable: true,
+                defaultSelectedKeys: ["1"],
+              }}
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  Filter
+                  <ArrowDropDownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+            {filter === "room-type" || filter === "room-number" ? (
+              <input
+                style={{
+                  height: "100%",
+                  width: "4.5rem",
+                  color: "black",
+                  fontSize: "15px",
+                  textAlign: "center",
+                  borderRadius: "10px",
+                }}
+                onChange={(e) => {
+                  setFilterData(e.target.value);
+                }}
+              ></input>
+            ) : (
+              <div style={{ maxWidth: "0.1rem" }}>
+                <DateTimePicker
+                  sx={{
+                    backgroundColor: "white",
+                    borderRadius: "10px",
+                  }}
+                  label=""
+                  onChange={(value) => setFilterData(parseInt(value.unix()))}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
         <Modal open={openPopup} onClose={handleRemovePopUp}>
           <Create initialData={{}} />
         </Modal>
