@@ -64,7 +64,10 @@ function BookingRow({ booking }) {
   return (
     <>
       <Table.Row>
-        <Cabin>{booking.room_id}</Cabin>
+        <Stacked>
+          <Cabin>{booking.room_type}</Cabin>
+          <Cabin>{booking.room_id}</Cabin>
+        </Stacked>
         <Stacked>
           <span>{booking.user_email}</span>
         </Stacked>

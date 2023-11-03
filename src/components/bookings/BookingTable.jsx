@@ -5,6 +5,12 @@ import BookingRow from "./BookingRow";
 
 import API_Service from "../../api/service";
 
+function filterByRoomType(bookings, roomType) {
+  return bookings.filter((booking) => {
+    return booking.room_type === roomType;
+  });
+}
+
 function filterByRoomNumber(bookings, roomNumber) {
   return bookings.filter((booking) => {
     return booking.room_id === roomNumber;
@@ -17,13 +23,19 @@ function BookingTable({ filter, filterData }) {
     const fetchData = async () => {
       const response = await API_Service.getBookings();
       const data = response.data.data;
-      console.log(filterData)
-      if (filter === "room-number")
-        setBookData(filterByRoomNumber(data, parseInt(filterData)));
-      else setBookData(data);
+      switch (filter) {
+        case "room-type":
+          setBookData(filterByRoomType(data, filterData));
+          break;
+        case "room-number":
+          setBookData(filterByRoomNumber(data, parseInt(filterData)));
+          break;
+        default:
+          setBookData(data);
+      }
     };
     fetchData();
-  }, [filterData]);
+  }, [filter, filterData]);
   return (
     <Menus>
       <Table columns="0.6fr 2fr 2.4fr 1.4fr 1fr 3.2rem">

@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Modal, Button, TextField } from "@mui/material";
+import { Modal, Button } from "@mui/material";
 import { AddCircle } from "@mui/icons-material";
 
 import "./App.css";
@@ -17,15 +17,44 @@ function App() {
   const [filterData, setFilterData] = useState("");
   const handleRemovePopUp = () => setOpenPopup(false);
   const handleBooking = () => setOpenPopup(true);
-  const handleRoomFilter = () => setFilter("room-number");
+  const handleRoomFilter = (filter) => setFilter(filter);
   const items = [
     {
       key: "1",
-      label: <button onClick={handleRoomFilter}>Room number</button>,
+      label: (
+        <button
+          onClick={() => {
+            handleRoomFilter("none");
+          }}
+        >
+          None
+        </button>
+      ),
     },
     {
-      key: "1",
-      label: <button>Check-in time</button>,
+      key: "2",
+      label: (
+        <button
+          onClick={() => {
+            handleRoomFilter("room-type");
+          }}
+        >
+          Room type
+        </button>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <button
+          onClick={() => {
+            console.log("yoooo");
+            handleRoomFilter("room-number");
+          }}
+        >
+          Room number
+        </button>
+      ),
     },
   ];
   return (
@@ -54,6 +83,7 @@ function App() {
           <Dropdown
             menu={{
               items,
+              selectable: true,
             }}
           >
             <a onClick={(e) => e.preventDefault()}>
