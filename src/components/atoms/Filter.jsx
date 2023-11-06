@@ -1,119 +1,70 @@
-import React, { useState } from "react";
-import {
-  DataGrid,
-  GridToolbarContainer,
-  GridToolbarFilterButton,
-  GridToolbarDensitySelector,
-  GridToolbarExport,
-} from "@mui/x-data-grid";
-import { IconButton, Modal } from "@mui/material";
-import EditRounded from "@mui/icons-material/EditRounded";
-import { CancelRounded } from "@mui/icons-material";
-import Cancel from "../Cancel";
+import React from "react";
+import { Select, SelectItem } from "@nextui-org/react";
+import CustomPicker from "./CustomPicker";
 
-function CustomToolbar() {
+const Filter = ({ filter, setFilter, filterData, setFilterData }) => {
+  const filters = [
+    {
+      label: "None",
+      value: "none",
+    },
+    {
+      label: "Room type",
+      value: "room-type",
+    },
+    {
+      label: "Room number",
+      value: "room-number",
+    },
+    {
+      label: "Check-in",
+      value: "start-time",
+    },
+    {
+      label: "Check-out",
+      value: "end-time",
+    },
+  ];
+  const handleTypeChange = (e) => {
+    setFilter(e.target.value);
+  };
+  const handleValueChange = (e) => {
+    setFilterData(e.target.value);
+  };
   return (
-    <GridToolbarContainer>
-      <GridToolbarFilterButton />
-      <GridToolbarDensitySelector />
-      <GridToolbarExport />
-    </GridToolbarContainer>
-  );
-}
-
-const renderDetailsButton = ({ handleCancel }) => {
-  const [openPopup, setOpenPopup] = useState(true);
-  const handleRemovePopUp = () => setOpenPopup(false);
-  return (
-    <strong style={{ display: "flex" }}>
-      <IconButton color="primary">
-        <EditRounded />
-      </IconButton>
-      <IconButton color="error" onClick={() => {}}>
-        <CancelRounded />
-      </IconButton>
-      {/* <Modal open={openPopup} onClose={handleRemovePopUp}>
-        <Cancel data={cancelData} refund={0} />
-      </Modal> */}
-    </strong>
+    <div className="flex gap-1 items-center">
+      <Select
+        label="Filter"
+        className="w-36"
+        size="sm"
+        radius="lg"
+        value={filter}
+        onChange={handleTypeChange}
+      >
+        {filters.map((filter) => (
+          <SelectItem
+            key={filter.value}
+            value={filter.value}
+            className="text-gray-500"
+          >
+            {filter.label}
+          </SelectItem>
+        ))}
+      </Select>
+      {filter === "room-type" || filter === "room-number" ? (
+        <input
+          className="text-center h-10 w-16 outline-none border-b-2 bg-transparent"
+          type="text"
+          value={filterData}
+          onChange={handleValueChange}
+        />
+      ) : filter === "start-time" || filter === "end-time" ? (
+        <CustomPicker setFilterData={setFilterData} />
+      ) : (
+        <></>
+      )}
+    </div>
   );
 };
 
-export default function ControlledFilters({ data }) {
-  const [selectedRow, setSelectedRow] = useState({});
-  let columns = [
-    {
-      field: "id",
-      headerName: "ID",
-      type: "number",
-    },
-    {
-      field: "room_id",
-      headerName: "Room",
-      type: "number",
-    },
-    {
-      field: "user_email",
-      headerName: "Email",
-      type: "string",
-    },
-    {
-      field: "amount",
-      headerName: "Amount",
-      type: "number",
-    },
-    {
-      field: "start_time",
-      headerName: "Check-in",
-      type: "dateTime",
-    },
-    {
-      field: "end_time",
-      headerName: "Check-out",
-      type: "dateTime",
-    },
-    {
-      field: "edit",
-      headerName: "",
-      renderCell: renderDetailsButton,
-    },
-  ];
-
-  const [filterModel, setFilterModel] = React.useState({
-    items: [],
-  });
-
-  var valData = data;
-  const modifyData = () => {
-    let res = [];
-    for (let item of valData) {
-      item.start_time = new Date(item.start_time);
-      item.end_time = new Date(item.end_time);
-      res.push(item);
-    }
-    return res;
-  };
-
-  let newData = {
-    columns,
-    rows: modifyData(),
-  };
-
-  const onRowsSelectionHandler = (ids) => {
-    console.log(ids.row);
-  };
-
-  return (
-    <div style={{ height: 400, width: "auto", zIndex: "-1" }}>
-      <DataGrid
-        {...newData}
-        slots={{
-          toolbar: CustomToolbar,
-        }}
-        filterModel={filterModel}
-        onFilterModelChange={(newFilterModel) => setFilterModel(newFilterModel)}
-        onRowClick={(ids) => onRowsSelectionHandler(ids)}
-      />
-    </div>
-  );
-}
+export default Filter;

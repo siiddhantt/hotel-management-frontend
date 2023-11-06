@@ -37,8 +37,10 @@ function Edit({ initialData, handleUpdateData }) {
   };
   return (
     <div className="modal-body">
-      <div className="form-body">
-        <div style={{ color: "black" }}>Edit booking</div>
+      <div className="form-body rounded-2xl bg-[#18181B]">
+        <div className="text-2xl" style={{ fontFamily: "Poppins" }}>
+          Edit booking
+        </div>
         <TextField
           id="outlined-basic"
           label="Room number"
@@ -72,7 +74,7 @@ function Edit({ initialData, handleUpdateData }) {
             onChange={(value) => setEndTime(parseInt(value.unix()))}
           />
         </div>
-        <div className="pricing">
+        <div className="pricing text-lg" style={{ fontFamily: "Poppins" }}>
           <div>Total Price = ₹{price.toFixed(2)}</div>
           <div>Previous Price = ₹{initialData.amount.toFixed(2)}</div>
         </div>

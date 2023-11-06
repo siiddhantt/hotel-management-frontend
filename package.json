@@ -17,6 +17,7 @@
     "@mui/material": "^5.14.16",
     "@mui/x-data-grid": "^6.17.0",
     "@mui/x-date-pickers": "^6.17.0",
+    "@nextui-org/react": "^2.2.3",
     "antd": "^5.10.3",
     "axios": "^1.6.0",
     "date-fns": "^2.30.0",

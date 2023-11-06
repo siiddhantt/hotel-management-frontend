@@ -25,6 +25,23 @@ export const convertEpoch = (epoch) => {
   return dateTime;
 };
 
+export const epochToDateTime = (epoch) => {
+  const date = new Date(epoch * 1000);
+  const hours = date.getHours();
+  let minutes = date.getMinutes();
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  let ampm = hours >= 12 ? "PM" : "AM";
+  const time = `${hours}:${minutes} ${ampm}`;
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const dt = date.getDate();
+  const formattedDate = `${dt}/${month}/${year}`;
+  return {
+    time,
+    date: formattedDate,
+  };
+};
+
 export const formatCurrency = (value) =>
   new Intl.NumberFormat("en", { style: "currency", currency: "INR" }).format(
     value

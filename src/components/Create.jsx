@@ -35,8 +35,10 @@ function Create() {
   };
   return (
     <div className="modal-body">
-      <div className="form-body">
-        <div style={{ color: "black" }}>Create new booking</div>
+      <div className="form-body rounded-2xl bg-[#18181B]">
+        <div className="text-2xl" style={{ fontFamily: "Poppins" }}>
+          Create new booking
+        </div>
         <TextField
           id="outlined-basic"
           label="Room number"
@@ -70,8 +72,8 @@ function Create() {
             onChange={(value) => setEndTime(parseInt(value.unix()))}
           />
         </div>
-        <div className="pricing">
-          <div>Total Price = {price.toFixed(2)}</div>
+        <div className="pricing text-lg" style={{ fontFamily: "Poppins" }}>
+          <div>Total Price: {price.toFixed(2)}</div>
         </div>
         <Button variant="outlined" onClick={handleCreate}>
           Create

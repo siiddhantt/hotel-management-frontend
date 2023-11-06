@@ -1,16 +1,22 @@
 import { useState } from "react";
-import { Dropdown, Space } from "antd";
-import { Modal, Button } from "@mui/material";
+import { Modal } from "@mui/material";
+import { Button } from "@nextui-org/react";
 import { AddCircle } from "@mui/icons-material";
-import { ArrowDropDownOutlined } from "@mui/icons-material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 import "./App.css";
+import Filter from "./components/atoms/Filter";
 import Create from "./components/Create";
-import Bookings from "./components/bookings/Bookings";
-import GlobalStyles from "./styles/GlobalStyles";
+import BookingsTable from "./components/BookingsTable";
 
 function App() {
   const [openPopup, setOpenPopup] = useState(false);
@@ -18,160 +24,42 @@ function App() {
   const [filterData, setFilterData] = useState("");
   const handleRemovePopUp = () => setOpenPopup(false);
   const handleBooking = () => setOpenPopup(true);
-  const handleRoomFilter = (filter) => setFilter(filter);
-  const items = [
-    {
-      key: "1",
-      label: (
-        <button
-          onClick={() => {
-            handleRoomFilter("none");
-          }}
-        >
-          None
-        </button>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <button
-          onClick={() => {
-            handleRoomFilter("room-type");
-          }}
-        >
-          Room type
-        </button>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <button
-          onClick={() => {
-            handleRoomFilter("room-number");
-          }}
-        >
-          Room number
-        </button>
-      ),
-    },
-    {
-      key: "4",
-      label: (
-        <button
-          onClick={() => {
-            handleRoomFilter("start-time");
-          }}
-        >
-          Start time
-        </button>
-      ),
-    },
-    {
-      key: "5",
-      label: (
-        <button
-          onClick={() => {
-            handleRoomFilter("end-time");
-          }}
-        >
-          End time
-        </button>
-      ),
-    },
-  ];
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <GlobalStyles />
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            color: "white",
-            marginBottom: "10px",
-            height: "5rem",
-            width: "100%",
-            borderStyle: "solid",
-            borderColor: "rgba(255, 255, 255, 0.25)",
-            borderWidth: "0.1rem",
-            borderRadius: "10px",
-            padding: "10px",
-          }}
-        >
-          <Button
-            variant="outlined"
-            color="success"
-            startIcon={<AddCircle />}
-            onClick={handleBooking}
-          >
-            Add new booking
-          </Button>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              width: "11rem",
-              justifyContent: "right",
-              gap: 5,
-            }}
-          >
-            {filter === "room-type" || filter === "room-number" ? (
-              <input
-                style={{
-                  height: "50%",
-                  width: "4.5rem",
-                  color: "black",
-                  fontSize: "15px",
-                  textAlign: "center",
-                  borderRadius: "10px",
-                }}
-                onChange={(e) => {
-                  setFilterData(e.target.value);
-                }}
-              ></input>
-            ) : filter === "start-time" || filter === "end-time" ? (
-              <div style={{ maxWidth: "0.1rem" }}>
-                <DateTimePicker
-                  sx={{
-                    backgroundColor: "white",
-                    borderRadius: "10px",
-                  }}
-                  label=""
-                  inputProps={{ size: "small" }}
-                  slotProps={{ textField: { size: "small" } }}
-                  onChange={(value) => setFilterData(parseInt(value.unix()))}
-                />
-              </div>
-            ) : (
-              <></>
-            )}
-            <Dropdown
-              menu={{
-                items,
-                selectable: true,
-                defaultSelectedKeys: ["1"],
-              }}
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <div className="menubar rounded-2xl">
+            <Button
+              variant="flat"
+              color="default"
+              radius="lg"
+              className="p-6"
+              startContent={<AddCircle />}
+              onClick={handleBooking}
             >
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>
-                  Filter
-                  <ArrowDropDownOutlined />
-                </Space>
-              </a>
-            </Dropdown>
+              New booking
+            </Button>
+            <Filter
+              filter={filter}
+              setFilter={setFilter}
+              filterData={filterData}
+              setFilterData={setFilterData}
+            />
           </div>
-        </div>
-
-        <Modal open={openPopup} onClose={handleRemovePopUp}>
-          <Create initialData={{}} />
-        </Modal>
-        <Bookings filter={filter} filterData={filterData} />
-      </LocalizationProvider>
-    </div>
+          <Modal open={openPopup} onClose={handleRemovePopUp}>
+            <Create initialData={{}} />
+          </Modal>
+          <BookingsTable filter={filter} filterData={filterData} />
+        </LocalizationProvider>
+      </div>
+    </ThemeProvider>
   );
 }
 
